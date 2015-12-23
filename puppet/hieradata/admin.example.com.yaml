@@ -534,34 +534,34 @@ dynamic_cluster_instances:
       - Wls_machine[Node1]
       - Wls_machine[Node2]
 
-datasource_instances:
-    'hrDS':
-      ensure:                      'present'
-      drivername:                  'oracle.jdbc.xa.client.OracleXADataSource'
-      extraproperties:
-        - 'SendStreamAsBlob=true'
-        - 'oracle.net.CONNECT_TIMEOUT=10001'
-      globaltransactionsprotocol:  'TwoPhaseCommit'
-      shrinkfrequencyseconds:      '600'
-      initialcapacity:             '2'
-      jndinames:
-        - 'jdbc/hrDS'
-        - 'jdbc/hrDS2'
-      maxcapacity:                 '30'
-      target:
-        - 'wlsServer1'
-        - 'wlsServer2'
-      targettype:
-        - 'Server'
-        - 'Server'
-      testtablename:               'SQL SELECT 1 FROM DUAL'
-      url:                         "jdbc:oracle:thin:@dbagent2.alfa.local:1521/test.oracle.com"
-      user:                        'hr'
-      password:                    'hr'
-      usexa:                       '1'
-      require:
-        - Wls_server[wlsServer1]
-        - Wls_server[wlsServer2]
+# datasource_instances:
+    # 'hrDS':
+    #   ensure:                      'present'
+    #   drivername:                  'oracle.jdbc.xa.client.OracleXADataSource'
+    #   extraproperties:
+    #     - 'SendStreamAsBlob=true'
+    #     - 'oracle.net.CONNECT_TIMEOUT=10001'
+    #   globaltransactionsprotocol:  'TwoPhaseCommit'
+    #   shrinkfrequencyseconds:      '600'
+    #   initialcapacity:             '2'
+    #   jndinames:
+    #     - 'jdbc/hrDS'
+    #     - 'jdbc/hrDS2'
+    #   maxcapacity:                 '30'
+    #   target:
+    #     - 'wlsServer1'
+    #     - 'wlsServer2'
+    #   targettype:
+    #     - 'Server'
+    #     - 'Server'
+    #   testtablename:               'SQL SELECT 1 FROM DUAL'
+    #   url:                         "jdbc:oracle:thin:@dbagent2.alfa.local:1521/test.oracle.com"
+    #   user:                        'hr'
+    #   password:                    'hr'
+    #   usexa:                       '1'
+    #   require:
+    #     - Wls_server[wlsServer1]
+    #     - Wls_server[wlsServer2]
 
 file_persistence_folders:
    '/opt/oracle/wlsdomains/domains/Wls1221/persistence1':
@@ -703,6 +703,9 @@ jms_queue_instances:
      defaulttargeting:         '0'
      timetodeliver:            '-1'
      timetolive:               '300000'
+     insertionpaused:          '0'
+     productionpaused:         '0'
+     consumptionpaused:        '0'
      require:
        - Wls_jms_module[jmsClusterModule]
        - Wls_jms_subdeployment[jmsClusterModule:jmsServers]
@@ -719,6 +722,9 @@ jms_queue_instances:
      defaulttargeting:         '0'
      timetodeliver:            '-1'
      timetolive:               '300000'
+     insertionpaused:          '1'
+     productionpaused:         '1'
+     consumptionpaused:        '1'
      require:
        - Wls_jms_module[jmsClusterModule]
        - Wls_jms_subdeployment[jmsClusterModule:jmsServers]
@@ -736,6 +742,9 @@ jms_topic_instances:
      subdeployment:     'jmsServers'
      timetodeliver:     '-1'
      timetolive:        '300000'
+     insertionpaused:   '0'
+     productionpaused:  '1'
+     consumptionpaused: '0'
      require:
        - Wls_jms_module[jmsClusterModule]
        - Wls_jms_subdeployment[jmsClusterModule:jmsServers]
