@@ -1,5 +1,5 @@
 #
-# one machine setup with weblogic 12.1.3
+# one machine setup with weblogic 12.2.1
 # needs jdk7, orawls, orautils, fiddyspence-sysctl, erwbgy-limits puppet modules
 #
 Package{allow_virtual => false,}

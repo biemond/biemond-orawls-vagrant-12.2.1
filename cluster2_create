@@ -1,0 +1,104 @@
+#!/opt/puppetlabs/puppet/bin/ruby
+
+require 'json'
+require 'uri'
+require 'net/http'
+
+user = 'weblogic'
+pwd = 'weblogic1'
+domain = 'default'
+
+# uri = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/changeManager/startEdit')
+
+# http = Net::HTTP.new(uri.host, uri.port)
+
+# request = Net::HTTP::Post.new(uri.request_uri)
+# request.basic_auth user, pwd
+# request.add_field('Accept', 'application/json')
+# request.add_field('Content-Type', 'application/json')
+# request.add_field('X-Requested-By', 'MyClient')
+# request.body = "{}"
+
+# response = http.request(request)
+
+# puts "startEdit"
+# puts response.code
+# puts response.body
+
+# case response.code
+# when '200'
+
+  cluster_create = Hash.new
+  cluster_create['name']      = "cluster1"
+  cluster_create['clusterAddress'] = nil
+
+  cluster_create['clusterMessagingMode']      = "unicast"
+  cluster_create['multicastAddress']          = "239.192.0.0"
+  cluster_create['clusterBroadcastChannel']   = nil
+  cluster_create['multicastPort']             = 7001
+
+  cluster_create['frontendHost']              = nil
+  cluster_create['frontendHTTPPort']          = 0
+  cluster_create['frontendHTTPSPort']         = 0
+
+  cluster_create['migrationBasis']                  = "database"
+  cluster_create['autoMigrationTableName']          = "ACTIVE"
+  cluster_create['dataSourceForAutomaticMigration'] = nil
+  cluster_create['secureReplicationEnabled']        = false
+  cluster_create['dataSourceForJobScheduler']       = nil
+  # cluster_create['servers']                         = ['ServerA']
+
+  uri_create = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/clusters')
+  http_create = Net::HTTP.new(uri_create.host, uri_create.port)
+
+  request_create = Net::HTTP::Post.new(uri_create.request_uri)
+  request_create.basic_auth user, pwd
+  request_create.add_field('Accept', 'application/json')
+  request_create.add_field('Content-Type', 'application/json')
+  request_create.add_field('X-Requested-By', 'MyClient')
+  request_create.body = cluster_create.to_json
+
+  response_create = http_create.request(request_create)
+
+  puts "create"
+  puts response_create.code
+  puts response_create.body
+
+  # case response_create.code
+  # when '201' # created
+
+  #   uri_act = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/changeManager/activate')
+  #   http_act = Net::HTTP.new(uri_act.host, uri_act.port)
+
+  #   request_act = Net::HTTP::Post.new(uri_act.request_uri)
+  #   request_act.basic_auth user, pwd
+  #   request_act.add_field('Accept', 'application/json')
+  #   request_act.add_field('Content-Type', 'application/json')
+  #   request_act.add_field('X-Requested-By', 'MyClient')
+  #   request_act.body = "{}"
+
+  #   response_act = http_act.request(request_act)
+
+  #   puts "activate"
+  #   puts response_act.code
+  #   puts response_act.body
+
+  # else
+  #   uri_stop = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/changeManager/cancelEdit')
+
+  #   http_stop = Net::HTTP.new(uri_stop.host, uri_stop.port)
+
+  #   request_stop = Net::HTTP::Post.new(uri_stop.request_uri)
+  #   request_stop.basic_auth user, pwd
+  #   request_stop.add_field('Accept', 'application/json')
+  #   request_stop.add_field('Content-Type', 'application/json')
+  #   request_stop.add_field('X-Requested-By', 'MyClient')
+  #   request_stop.body = "{}"
+
+  #   response_stop = http_stop.request(request_stop)
+
+  #   puts "stopEdit"
+  #   puts response_stop.code
+  #   puts response_stop.body
+  # end
+#end

@@ -1,0 +1,89 @@
+#!/opt/puppetlabs/puppet/bin/ruby
+
+require 'json'
+require 'uri'
+require 'net/http'
+
+user = 'weblogic'
+pwd = 'weblogic1'
+domain = 'default'
+
+# uri = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/changeManager/startEdit')
+
+# http = Net::HTTP.new(uri.host, uri.port)
+
+# request = Net::HTTP::Post.new(uri.request_uri)
+# request.basic_auth user, pwd
+# request.add_field('Accept', 'application/json')
+# request.add_field('Content-Type', 'application/json')
+# request.add_field('X-Requested-By', 'MyClient')
+# request.body = "{}"
+
+# response = http.request(request)
+
+# puts "startEdit"
+# puts response.code
+# puts response.body
+
+# case response.code
+# when '200'
+
+  cluster_delete = Hash.new
+
+  uri_delete = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/clusters/cluster1')
+  http_delete = Net::HTTP.new(uri_delete.host, uri_delete.port)
+
+  request_delete = Net::HTTP::Delete.new(uri_delete.request_uri)
+  request_delete.basic_auth user, pwd
+  request_delete.add_field('Accept', 'application/json')
+  request_delete.add_field('Content-Type', 'application/json')
+  request_delete.add_field('X-Requested-By', 'MyClient')
+  request_delete.body = "{}"
+
+  response_delete = http_delete.request(request_delete)
+
+  puts "delete"
+  puts response_delete.code
+  puts response_delete.body
+
+  # case response_delete.code
+  # when '200' # ok
+
+  #   uri_act = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/changeManager/activate')
+  #   http_act = Net::HTTP.new(uri_act.host, uri_act.port)
+
+  #   request_act = Net::HTTP::Post.new(uri_act.request_uri)
+  #   request_act.basic_auth user, pwd
+  #   request_act.add_field('Accept', 'application/json')
+  #   request_act.add_field('Content-Type', 'application/json')
+  #   request_act.add_field('X-Requested-By', 'MyClient')
+  #   request_act.body = "{}"
+
+  #   response_act = http_act.request(request_act)
+
+  #   puts "activate"
+  #   puts response_act.code
+  #   puts response_act.body
+
+  # else
+  #   uri_stop = URI.parse('http://10.10.10.10:7001/management/weblogic/latest/edit/changeManager/cancelEdit')
+
+  #   http_stop = Net::HTTP.new(uri_stop.host, uri_stop.port)
+
+  #   request_stop = Net::HTTP::Post.new(uri_stop.request_uri)
+  #   request_stop.basic_auth user, pwd
+  #   request_stop.add_field('Accept', 'application/json')
+  #   request_stop.add_field('Content-Type', 'application/json')
+  #   request_stop.add_field('X-Requested-By', 'MyClient')
+  #   request_stop.body = "{}"
+
+  #   response_stop = http_stop.request(request_stop)
+
+  #   puts "stopEdit"
+  #   puts response_stop.code
+  #   puts response_stop.body
+  # end
+
+# end
+
+

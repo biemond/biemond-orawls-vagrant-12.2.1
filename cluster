@@ -1,0 +1,52 @@
+#!/opt/puppetlabs/puppet/bin/ruby
+
+require 'base64'
+require 'rest-client'
+require 'json'
+
+user = 'weblogic'
+pwd = 'weblogic1'
+domain = 'default'
+
+response = RestClient.get("http://10.10.10.10:7001/management/weblogic/latest/domainConfig/clusters",
+                          {:authorization => "Basic #{Base64.strict_encode64("#{user}:#{pwd}")}",
+                           :accept        => 'application/json'})
+
+case response.code
+when 200
+  items = JSON.parse(response)[ 'items' ]
+
+  all_cluster = Array.new
+  items.each do |item|
+    cluster                   = Hash.new
+    cluster['domain']         = 'default'
+    cluster['name']           = "#{domain}/#{item['name']}"
+    cluster['clusteraddress'] = item['clusterAddress']
+
+    servers_array = Array.new
+    item['servers'].each do |server|
+      servers_array.push server['identity'][1]
+    end
+    cluster['servers'] = servers_array.join(',')
+
+    cluster['messagingmode']             = item['clusterMessagingMode']
+    cluster['multicastaddress']          = item['multicastAddress']
+    cluster['unicastbroadcastchannel']   = item['ClusterBroadcastChannel']
+    cluster['multicastport']             = item['multicastPort']
+
+    cluster['frontendhost']              = item['frontendHost']
+    cluster['frontendhttpport']          = item['frontendHTTPPort'] == 0 ? nil : item['frontendHTTPPort']
+    cluster['frontendhttpsport']         = item['frontendHTTPSPort'] == 0 ? nil : item['frontendHTTPSPort']
+
+    cluster['migrationbasis']            = item['migrationBasis']
+    cluster['migration_table_name']      = item['autoMigrationTableName']
+    cluster['migration_datasource']      = item['dataSourceForAutomaticMigration']
+    cluster['securereplication']         = item['secureReplicationEnabled']
+    cluster['datasourceforjobscheduler'] = item['dataSourceForJobScheduler']
+
+    all_cluster.push cluster
+  end
+  puts all_cluster
+
+end
+
