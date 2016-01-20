@@ -183,14 +183,14 @@ userconfig_instances:
 #       'ConnectionRetryLimit':           2
 #     before:             Wls_domain[Wls1221]
 
-identity_asserter_instances:
-  'DefaultIdentityAsserter':
-    ensure:             'present'
-    providerclassname:  'weblogic.security.providers.authentication.DefaultIdentityAsserter'
-    activetypes:        'AuthenticatedUser'
-    defaultmappertype:  'E'
-    order:              '1'
-    before:             Wls_domain[Wls1221]
+# identity_asserter_instances:
+#   'DefaultIdentityAsserter':
+#     ensure:             'present'
+#     providerclassname:  'weblogic.security.providers.authentication.DefaultIdentityAsserter'
+#     activetypes:        'AuthenticatedUser'
+#     defaultmappertype:  'E'
+#     order:              '1'
+#     before:             Wls_domain[Wls1221]
 
 
 wls_domain_instances:
