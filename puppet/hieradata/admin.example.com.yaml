@@ -79,6 +79,8 @@ wls_setting_instances:
     require:                   Orawls::Domain[Wls1221]
     debug_module:              true
     archive_path:              '/var/tmp/install/default_domain'
+    post_classpath:            '/opt/oracle/middleware12c/wlserver/modules/features/wlst.wls.classpath.jar'
+
   'plain':
     user:                      *wls_os_user
     weblogic_home_dir:         *wls_weblogic_home_dir
@@ -153,33 +155,33 @@ userconfig_instances:
      weblogic_user:        *wls_weblogic_user
      weblogic_password:    *domain_wls_password
 
-authentication_provider_instances:
-  'DefaultAuthenticator':
-    ensure:             'present'
-    control_flag:       'SUFFICIENT'
-    order:              '0'
-    before:             Wls_domain[Wls1221]
-  'ActiveDirectoryAuthenticator':
-    ensure:             'present'
-    control_flag:       'SUFFICIENT'
-    providerclassname:  'weblogic.security.providers.authentication.ActiveDirectoryAuthenticator'
-    provider_specific:
-      'Credential':                     'password'
-      'GroupBaseDN':                    'DC=ad,DC=company,DC=org'
-      'GroupFromNameFilter':            '(&(sAMAccountName=%g)(objectclass=group))'
-      'GroupMembershipSearching':       'limited'
-      'Host':                           'ad.company.org'
-      'MaxGroupMembershipSearchLevel':  4
-      'Principal':                      'CN=SER_WASadmin,OU=Service Accounts,DC=ad,DC=company,DC=org'
-      'UserBaseDN':                     'DC=ad,DC=company,DC=org'
-      'UserFromNameFilter':             '(&(sAMAccountName=%u)(objectclass=user))'
-      'UserNameAttribute':              'sAMAccountName'
-      'Port':                           389
-      'CacheTTL':                       60
-      'CacheSize':                      1024
-      'ConnectTimeout':                 2
-      'ConnectionRetryLimit':           2
-    before:             Wls_domain[Wls1221]
+# authentication_provider_instances:
+#   'DefaultAuthenticator':
+#     ensure:             'present'
+#     control_flag:       'SUFFICIENT'
+#     order:              '0'
+#     before:             Wls_domain[Wls1221]
+#   'ActiveDirectoryAuthenticator':
+#     ensure:             'present'
+#     control_flag:       'SUFFICIENT'
+#     providerclassname:  'weblogic.security.providers.authentication.ActiveDirectoryAuthenticator'
+#     provider_specific:
+#       'Credential':                     'password'
+#       'GroupBaseDN':                    'DC=ad,DC=company,DC=org'
+#       'GroupFromNameFilter':            '(&(sAMAccountName=%g)(objectclass=group))'
+#       'GroupMembershipSearching':       'limited'
+#       'Host':                           'ad.company.org'
+#       'MaxGroupMembershipSearchLevel':  4
+#       'Principal':                      'CN=SER_WASadmin,OU=Service Accounts,DC=ad,DC=company,DC=org'
+#       'UserBaseDN':                     'DC=ad,DC=company,DC=org'
+#       'UserFromNameFilter':             '(&(sAMAccountName=%u)(objectclass=user))'
+#       'UserNameAttribute':              'sAMAccountName'
+#       'Port':                           389
+#       'CacheTTL':                       60
+#       'CacheSize':                      1024
+#       'ConnectTimeout':                 2
+#       'ConnectionRetryLimit':           2
+#     before:             Wls_domain[Wls1221]
 
 identity_asserter_instances:
   'DefaultIdentityAsserter':
@@ -556,34 +558,34 @@ dynamic_cluster_instances:
       - Wls_machine[Node1]
       - Wls_machine[Node2]
 
-datasource_instances:
-    'hrDS':
-      ensure:                      'present'
-      drivername:                  'oracle.jdbc.xa.client.OracleXADataSource'
-      extraproperties:
-        - 'SendStreamAsBlob=true'
-        - 'oracle.net.CONNECT_TIMEOUT=10001'
-      globaltransactionsprotocol:  'TwoPhaseCommit'
-      shrinkfrequencyseconds:      '600'
-      initialcapacity:             '2'
-      jndinames:
-        - 'jdbc/hrDS'
-        - 'jdbc/hrDS2'
-      maxcapacity:                 '30'
-      target:
-        - 'wlsServer1'
-        - 'wlsServer2'
-      targettype:
-        - 'Server'
-        - 'Server'
-      testtablename:               'SQL SELECT 1 FROM DUAL'
-      url:                         "jdbc:oracle:thin:@dbagent2.alfa.local:1521/test.oracle.com"
-      user:                        'hr'
-      password:                    'hr'
-      usexa:                       '1'
-      require:
-        - Wls_server[wlsServer1]
-        - Wls_server[wlsServer2]
+# datasource_instances:
+#     'hrDS':
+#       ensure:                      'present'
+#       drivername:                  'oracle.jdbc.xa.client.OracleXADataSource'
+#       extraproperties:
+#         - 'SendStreamAsBlob=true'
+#         - 'oracle.net.CONNECT_TIMEOUT=10001'
+#       globaltransactionsprotocol:  'TwoPhaseCommit'
+#       shrinkfrequencyseconds:      '600'
+#       initialcapacity:             '2'
+#       jndinames:
+#         - 'jdbc/hrDS'
+#         - 'jdbc/hrDS2'
+#       maxcapacity:                 '30'
+#       target:
+#         - 'wlsServer1'
+#         - 'wlsServer2'
+#       targettype:
+#         - 'Server'
+#         - 'Server'
+#       testtablename:               'SQL SELECT 1 FROM DUAL'
+#       url:                         "jdbc:oracle:thin:@dbagent2.alfa.local:1521/test.oracle.com"
+#       user:                        'hr'
+#       password:                    'hr'
+#       usexa:                       '1'
+#       require:
+#         - Wls_server[wlsServer1]
+#         - Wls_server[wlsServer2]
 
 file_persistence_folders:
    '/opt/oracle/wlsdomains/domains/Wls1221/persistence1':
