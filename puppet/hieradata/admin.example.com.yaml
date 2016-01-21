@@ -618,6 +618,7 @@ jmsserver_instances:
        - 'Server'
      persistentstore:     'jmsFile1'
      persistentstoretype: 'FileStore'
+     consumptionpaused:   '1'
      require:
        - Wls_server[wlsServer1]
        - Wls_file_persistence_store[jmsFile1]
