@@ -79,8 +79,7 @@ wls_setting_instances:
     require:                   Orawls::Domain[Wls1221]
     debug_module:              true
     archive_path:              '/var/tmp/install/default_domain'
-    post_classpath:            '/opt/oracle/middleware12c/wlserver/modules/features/wlst.wls.classpath.jar'
-
+    # post_classpath:            '/opt/oracle/middleware12c/wlserver/modules/features/wlst.wls.classpath.jar'
   'plain':
     user:                      *wls_os_user
     weblogic_home_dir:         *wls_weblogic_home_dir
@@ -100,6 +99,7 @@ pack_domain_instances:
 nodemanager_instances:
   'nodemanager':
     log_output:                            *logoutput
+    log_file:                              'nodemanager_wls1221.log'
     custom_identity:                       true
     custom_identity_keystore_filename:     '/vagrant/identity_admin.jks'
     custom_identity_keystore_passphrase:   'welcome'
@@ -115,6 +115,7 @@ nodemanager_instances:
       'listen_backlog':                    60
   'nodemanager_plain':
     log_output:                            *logoutput
+    log_file:                              'nodemanager_plain.log'
     nodemanager_address:                   *domain_adminserver_address
     nodemanager_port:                      5557
     domain_name:                           "plain_Wls"
@@ -144,53 +145,43 @@ control_instances:
      action:                       'start'
      log_output:                   *logoutput
 
-# create password file for WLST utility
-userconfig_instances:
-  'Wls12c':
-     log_output:           *logoutput
-     user_config_dir:      '/home/oracle'
-     domain_name:          'plain_Wls'
-     adminserver_address:  *domain_adminserver_address
-     adminserver_port:     7101
-     weblogic_user:        *wls_weblogic_user
-     weblogic_password:    *domain_wls_password
 
-# authentication_provider_instances:
-#   'DefaultAuthenticator':
-#     ensure:             'present'
-#     control_flag:       'SUFFICIENT'
-#     order:              '0'
-#     before:             Wls_domain[Wls1221]
-#   'ActiveDirectoryAuthenticator':
-#     ensure:             'present'
-#     control_flag:       'SUFFICIENT'
-#     providerclassname:  'weblogic.security.providers.authentication.ActiveDirectoryAuthenticator'
-#     provider_specific:
-#       'Credential':                     'password'
-#       'GroupBaseDN':                    'DC=ad,DC=company,DC=org'
-#       'GroupFromNameFilter':            '(&(sAMAccountName=%g)(objectclass=group))'
-#       'GroupMembershipSearching':       'limited'
-#       'Host':                           'ad.company.org'
-#       'MaxGroupMembershipSearchLevel':  4
-#       'Principal':                      'CN=SER_WASadmin,OU=Service Accounts,DC=ad,DC=company,DC=org'
-#       'UserBaseDN':                     'DC=ad,DC=company,DC=org'
-#       'UserFromNameFilter':             '(&(sAMAccountName=%u)(objectclass=user))'
-#       'UserNameAttribute':              'sAMAccountName'
-#       'Port':                           389
-#       'CacheTTL':                       60
-#       'CacheSize':                      1024
-#       'ConnectTimeout':                 2
-#       'ConnectionRetryLimit':           2
-#     before:             Wls_domain[Wls1221]
+authentication_provider_instances:
+  'DefaultAuthenticator':
+    ensure:             'present'
+    control_flag:       'SUFFICIENT'
+    order:              '0'
+    before:             Wls_domain[Wls1221]
+  # 'ActiveDirectoryAuthenticator':
+  #   ensure:             'present'
+  #   control_flag:       'SUFFICIENT'
+  #   providerclassname:  'weblogic.security.providers.authentication.ActiveDirectoryAuthenticator'
+  #   provider_specific:
+  #     'Credential':                     'password'
+  #     'GroupBaseDN':                    'DC=ad,DC=company,DC=org'
+  #     'GroupFromNameFilter':            '(&(sAMAccountName=%g)(objectclass=group))'
+  #     'GroupMembershipSearching':       'limited'
+  #     'Host':                           'ad.company.org'
+  #     'MaxGroupMembershipSearchLevel':  4
+  #     'Principal':                      'CN=SER_WASadmin,OU=Service Accounts,DC=ad,DC=company,DC=org'
+  #     'UserBaseDN':                     'DC=ad,DC=company,DC=org'
+  #     'UserFromNameFilter':             '(&(sAMAccountName=%u)(objectclass=user))'
+  #     'UserNameAttribute':              'sAMAccountName'
+  #     'Port':                           389
+  #     'CacheTTL':                       60
+  #     'CacheSize':                      1024
+  #     'ConnectTimeout':                 2
+  #     'ConnectionRetryLimit':           2
+  #   before:             Wls_domain[Wls1221]
 
-# identity_asserter_instances:
-#   'DefaultIdentityAsserter':
-#     ensure:             'present'
-#     providerclassname:  'weblogic.security.providers.authentication.DefaultIdentityAsserter'
-#     activetypes:        'AuthenticatedUser'
-#     defaultmappertype:  'E'
-#     order:              '1'
-#     before:             Wls_domain[Wls1221]
+identity_asserter_instances:
+  'DefaultIdentityAsserter':
+    ensure:             'present'
+    providerclassname:  'weblogic.security.providers.authentication.DefaultIdentityAsserter'
+    activetypes:        'AuthenticatedUser'
+    defaultmappertype:  'E'
+    order:              '1'
+    before:             Wls_domain[Wls1221]
 
 
 wls_domain_instances:
@@ -199,7 +190,7 @@ wls_domain_instances:
     jpa_default_provider:        'org.eclipse.persistence.jpa.PersistenceProvider'
     jta_max_transactions:        '20000'
     jta_transaction_timeout:     '30'
-    log_file_min_size:           '5000'
+    log_file_min_size:           '6000'
     log_filecount:               '10'
     log_filename:                '/var/log/weblogic/Wls1221.log'
     log_number_of_files_limited: '1'
@@ -323,22 +314,19 @@ machines_instances:
     nmtype:         'Plain'
 
 
-server_vm_args_permsize:      &server_vm_args_permsize     '-XX:PermSize=256m'
-server_vm_args_max_permsize:  &server_vm_args_max_permsize '-XX:MaxPermSize=256m'
-server_vm_args_memory:        &server_vm_args_memory       '-Xms752m'
-server_vm_args_max_memory:    &server_vm_args_max_memory   '-Xmx752m'
-
+server_vm_args_memory:         &server_vm_args_memory          '-Xms752m'
+server_vm_args_max_memory:     &server_vm_args_max_memory      '-Xmx752m'
+server_vm_resource_management: &server_vm_resource_management  '-XX:+UnlockCommercialFeatures -XX:+ResourceManagement'
 
 server_instances:
   'AdminServer':
     ensure:                                'present'
     arguments:
-           - *server_vm_args_permsize
-           - *server_vm_args_max_permsize
+           - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
-           - '-Dweblogic.Stdout=/var/log/weblogic/AdminServer.out'
-           - '-Dweblogic.Stderr=/var/log/weblogic/AdminServer_err.out'
+           - '-Dweblogic.Stdout=/var/log/weblogic/AdminServer_Wls1221.out'
+           - '-Dweblogic.Stderr=/var/log/weblogic/AdminServer_Wls1221_err.out'
     listenaddress:                         *domain_adminserver_address
     listenport:                            '7001'
     listenportenabled:                     '1'
@@ -357,14 +345,14 @@ server_instances:
     custom_identity_privatekey_passphrase: 'welcome'
     trust_keystore_file:                   *wls_trust_keystore_file
     trust_keystore_passphrase:             *wls_trust_keystore_passphrase
-    logfilename:                           '/var/log/weblogic/AdminServer.log'
-    log_datasource_filename:               '/var/log/weblogic/AdminServer_datasource.log'
+    logfilename:                           '/var/log/weblogic/AdminServer_Wls1221.log'
+    log_datasource_filename:               '/var/log/weblogic/AdminServer_datasource_Wls1221.log'
     log_file_min_size:                     '2000'
     log_filecount:                         '10'
     log_number_of_files_limited:           '1'
     log_rotate_logon_startup:              '1'
     log_rotationtype:                      'bySize'
-    log_http_filename:                     '/var/log/weblogic/AdminServer_access.log'
+    log_http_filename:                     '/var/log/weblogic/AdminServer_access_Wls1221.log'
     log_http_format_type:                  'extended'
     log_http_format:                       'date time x-XForwardedFor s-ip cs-method cs-uri x-SOAPAction sc-status bytes time-taken x-UserAgent'
     tunnelingenabled:                      '0'
@@ -373,8 +361,7 @@ server_instances:
   'wlsServer1':
     ensure:                                'present'
     arguments:
-           - *server_vm_args_permsize
-           - *server_vm_args_max_permsize
+           - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer1.out'
@@ -401,8 +388,7 @@ server_instances:
   'wlsServer2':
     ensure:                                'present'
     arguments:
-           - *server_vm_args_permsize
-           - *server_vm_args_max_permsize
+           - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer2.out'
@@ -428,8 +414,7 @@ server_instances:
   'plain/wlsServer1':
     ensure:                                'present'
     arguments:
-           - *server_vm_args_permsize
-           - *server_vm_args_max_permsize
+           - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer1_plain.out'
@@ -444,8 +429,7 @@ server_instances:
   'plain/wlsServer2':
     ensure:                                'present'
     arguments:
-           - *server_vm_args_permsize
-           - *server_vm_args_max_permsize
+           - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer2_plain.out'
@@ -537,10 +521,9 @@ server_template_instances:
  'ServerTemplateWeb':
   ensure:        'present'
   arguments:
-         - *server_vm_args_permsize
-         - *server_vm_args_max_permsize
-         - *server_vm_args_memory
-         - *server_vm_args_max_memory
+           - *server_vm_resource_management
+           - *server_vm_args_memory
+           - *server_vm_args_max_memory
   listenport:    '9101'
   sslenabled:    '1'
   ssllistenport: '9102'
