@@ -147,21 +147,9 @@ class java {
 
   include jdk7
 
-  # jdk7::install7{ 'jdk-8u45-linux-x64':
-  #     version                     => "8u45" ,
-  #     full_version                => "jdk1.8.0_45",
-  #     alternatives_priority       => 18000,
-  #     x64                         => true,
-  #     download_dir                => "/var/tmp/install",
-  #     urandom_java_fix            => true,
-  #     rsa_key_size_fix            => true,
-  #     cryptography_extension_file => "jce_policy-8.zip",
-  #     source_path                 => "/software",
-  # }
-
-  jdk7::install7{ 'jdk-8u65-linux-x64':
-      version                     => "8u65" ,
-      full_version                => "jdk1.8.0_65",
+  jdk7::install7{ 'jdk-8u72-linux-x64':
+      version                     => "8u72" ,
+      full_version                => "jdk1.8.0_72",
       alternatives_priority       => 18001,
       x64                         => true,
       download_dir                => "/var/tmp/install",
@@ -170,6 +158,18 @@ class java {
       cryptography_extension_file => "jce_policy-8.zip",
       source_path                 => "/software",
   }
+
+  # jdk7::install7{ 'jdk-8u65-linux-x64':
+  #     version                     => "8u65" ,
+  #     full_version                => "jdk1.8.0_65",
+  #     alternatives_priority       => 18001,
+  #     x64                         => true,
+  #     download_dir                => "/var/tmp/install",
+  #     urandom_java_fix            => true,
+  #     rsa_key_size_fix            => true,
+  #     cryptography_extension_file => "jce_policy-8.zip",
+  #     source_path                 => "/software",
+  # }
 
 }
 

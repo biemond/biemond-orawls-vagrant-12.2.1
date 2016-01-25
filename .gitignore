@@ -1,1 +1,9 @@
 .vagrant/*
+keys/*.pem
+keys/*.csr
+keys/*.key
+keys/*.p12
+keys/*.old
+keys/*.txt
+keys/*.attr
+keys/*.crt

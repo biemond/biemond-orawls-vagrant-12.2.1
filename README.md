@@ -29,7 +29,7 @@ edit Vagrantfile and update the software share
 
 ### Software
 - Weblogic 12.2.1 [fmw_12.2.1.0.0_wls.jar](http://www.oracle.com/technetwork/middleware/fusion-middleware/downloads/index.html)
-- JDK 8 [jdk-8u45-linux-x64.tar.gz](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- JDK 8 [jdk-8u72-linux-x64.tar.gz](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - JCE Policy 8 [jce_policy-8.zip](http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html)
 
 ### Startup the images
