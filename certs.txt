@@ -71,5 +71,5 @@ openssl pkcs12 -export -inkey node2.key -in node2.pem -out node2.p12 -name node2
 
 # identity node2 store
 rm ../identity_node2.jks
-keytool -importkeystore -destkeystore identity_node2.jks -deststorepass welcome -srckeystore node2.p12 -srcstorepass welcome -srcstoretype pkcs12
+keytool -importkeystore -destkeystore ../identity_node2.jks -deststorepass welcome -srckeystore node2.p12 -srcstorepass welcome -srcstoretype pkcs12
 
