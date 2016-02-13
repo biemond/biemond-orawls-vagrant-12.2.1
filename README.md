@@ -45,3 +45,7 @@ edit Vagrantfile and update the software share
 - /opt/puppetlabs/bin/puppet apply --verbose --report --trace /vagrant/puppet/manifests/development/site.pp
 
 
+### rest application on cluster
+
+- http://10.10.10.100:8001/Product-context-root/jersey/products/
+- http://10.10.10.200:8001/Product-context-root/jersey/products/

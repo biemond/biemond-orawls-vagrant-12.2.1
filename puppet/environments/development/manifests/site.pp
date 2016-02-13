@@ -23,6 +23,7 @@ node 'admin.example.com' {
   include file_persistence
   include jms
   include pack_domain
+  include deployments
 
   # include ora_em_agent
 
@@ -414,6 +415,15 @@ class pack_domain{
   $pack_domain_instances = hiera('pack_domain_instances', $default_params)
   create_resources('orawls::packdomain',$pack_domain_instances, $default_params)
 }
+
+class deployments{
+  require pack_domain
+
+  $default_params = {}
+  $deployment_instances = hiera('deployment_instances', $default_params)
+  create_resources('wls_deployment',$deployment_instances, $default_params)
+}
+
 
 # class ora_em_agent {
 

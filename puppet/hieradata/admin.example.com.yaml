@@ -384,7 +384,6 @@ server_instances:
     trust_keystore_passphrase:             *wls_trust_keystore_passphrase
     require:                               Wls_machine[Node1]
     timeout:                               60
-    server_parameters:                     'WebCluster'
   'wlsServer2':
     ensure:                                'present'
     arguments:
@@ -410,7 +409,6 @@ server_instances:
     trust_keystore_file:                   *wls_trust_keystore_file
     trust_keystore_passphrase:             *wls_trust_keystore_passphrase
     require:                               Wls_machine[Node2]
-    server_parameters:                     'WebCluster'
   'plain/wlsServer1':
     ensure:                                'present'
     arguments:
@@ -540,6 +538,41 @@ dynamic_cluster_instances:
       - Wls_server_template[ServerTemplateWeb]
       - Wls_machine[Node1]
       - Wls_machine[Node2]
+
+
+deployment_instances:
+  'jersey-bundle':
+    ensure:            'present'
+    deploymenttype:    'Library'
+    versionidentifier: '1.18@1.18.0.0'
+    timeout:           90
+    remote:            "1"
+    upload:            "1"
+    target:
+      - 'AdminServer'
+      - 'WebCluster'
+    targettype:
+      - 'Server'
+      - 'Cluster'
+    localpath:         '/vagrant/jersey-bundle-1.18.war'
+    require:
+       - Wls_cluster[WebCluster]
+  'webapp':
+    ensure:            'present'
+    deploymenttype:    'AppDeployment'
+    timeout:           90
+    remote:            "1"
+    upload:            "1"
+    target:
+      - 'WebCluster'
+    targettype:
+      - 'Cluster'
+    localpath:         '/vagrant/webapp.war'
+    require:
+       - Wls_deployment[jersey-bundle]
+       - Wls_cluster[WebCluster]
+
+
 
 # datasource_instances:
 #     'hrDS':
