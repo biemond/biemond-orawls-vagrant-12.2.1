@@ -318,6 +318,8 @@ server_vm_args_memory:         &server_vm_args_memory          '-Xms752m'
 server_vm_args_max_memory:     &server_vm_args_max_memory      '-Xmx752m'
 # server_vm_resource_management: &server_vm_resource_management  '-XX:+UnlockCommercialFeatures -XX:+ResourceManagement'
 
+# wlsServer1 & 2 can also be added to cluster by the server_parameters on wls_server
+# this way you don't need to use servers at wls_cluster
 server_instances:
   'AdminServer':
     ensure:                                'present'
@@ -384,6 +386,7 @@ server_instances:
     trust_keystore_passphrase:             *wls_trust_keystore_passphrase
     require:                               Wls_machine[Node1]
     timeout:                               60
+    # server_parameters:                     'WebCluster'
   'wlsServer2':
     ensure:                                'present'
     arguments:
@@ -409,6 +412,7 @@ server_instances:
     trust_keystore_file:                   *wls_trust_keystore_file
     trust_keystore_passphrase:             *wls_trust_keystore_passphrase
     require:                               Wls_machine[Node2]
+    # server_parameters:                     'WebCluster'
   'plain/wlsServer1':
     ensure:                                'present'
     arguments:
@@ -485,13 +489,9 @@ server_channel_instances:
     tunnelingenabled: '0'
     require:          Wls_server[wlsServer2]
 
-
+# inherited servers by using server_parameters on wls_servers
+# instead of defining on wls_cluster by using server parameter on wls_cluster
 cluster_instances:
-  'TestCluster':
-    ensure:                     'present'
-    migrationbasis:             'database'
-    messagingmode:              'unicast'
-    frontendhost:               '10.10.10.10'
   'WebCluster':
     ensure:                     'present'
     migrationbasis:             'database'
