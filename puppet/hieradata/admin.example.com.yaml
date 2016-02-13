@@ -316,13 +316,13 @@ machines_instances:
 
 server_vm_args_memory:         &server_vm_args_memory          '-Xms752m'
 server_vm_args_max_memory:     &server_vm_args_max_memory      '-Xmx752m'
-server_vm_resource_management: &server_vm_resource_management  '-XX:+UnlockCommercialFeatures -XX:+ResourceManagement'
+# server_vm_resource_management: &server_vm_resource_management  '-XX:+UnlockCommercialFeatures -XX:+ResourceManagement'
 
 server_instances:
   'AdminServer':
     ensure:                                'present'
     arguments:
-           - *server_vm_resource_management
+           # - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/AdminServer_Wls1221.out'
@@ -361,7 +361,7 @@ server_instances:
   'wlsServer1':
     ensure:                                'present'
     arguments:
-           - *server_vm_resource_management
+           # - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer1.out'
@@ -388,7 +388,7 @@ server_instances:
   'wlsServer2':
     ensure:                                'present'
     arguments:
-           - *server_vm_resource_management
+           # - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer2.out'
@@ -414,7 +414,7 @@ server_instances:
   'plain/wlsServer1':
     ensure:                                'present'
     arguments:
-           - *server_vm_resource_management
+           # - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer1_plain.out'
@@ -429,7 +429,7 @@ server_instances:
   'plain/wlsServer2':
     ensure:                                'present'
     arguments:
-           - *server_vm_resource_management
+           # - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer2_plain.out'
@@ -521,7 +521,7 @@ server_template_instances:
  'ServerTemplateWeb':
   ensure:        'present'
   arguments:
-           - *server_vm_resource_management
+           # - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
   listenport:    '9101'
