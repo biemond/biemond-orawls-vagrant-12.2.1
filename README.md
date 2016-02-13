@@ -49,3 +49,93 @@ edit Vagrantfile and update the software share
 
 - http://10.10.10.100:8001/Product-context-root/jersey/products/
 - http://10.10.10.200:8001/Product-context-root/jersey/products/
+
+### MT
+
+- undeploy jerser-bundle-1.18.war and webapp.war from WebCluster
+
+
+- Resource Template
+    - AppTemplateProduct
+
+- Deployments to AppTemplateProduct Resource Template
+    - jerser-bundle-1.18.war to AppTemplateProduct (not global)
+    - webapp.war to AppTemplateProduct (not global)
+
+- FileStore
+    - FileStoreMT
+        - File
+        - scope AppTemplateProduct
+
+- JMS server
+    - JMSServerMT
+        - scope AppTemplateProduct
+        - FileStoreMT
+
+- SystemModuleMT
+    - scope AppTemplateProduct
+    - sub deployment
+        - jms_servers
+            - JMSServerMT
+    - Distributed Queues
+        - DistributedQueueMT
+            - jndi jms/DistributedQueueMT
+            - target sub deployment jms_servers
+    - Connection factory
+        - ConnectionFactoryMT
+            - jndi jms/ConnectionFactoryMT
+
+
+- JDBC to pluggable database
+    - XXXX
+
+for every tenant
+    - virtual targets
+        - CustomerA
+            - WebCluster
+            - 10.10.10.100\n 10.10.10.200\n
+            - /customer_a
+            - port 8011
+        - CustomerB
+            - WebCluster
+            - 10.10.10.100\n 10.10.10.200\n
+            - /customer_b
+
+    - realms
+        - realm_CustomerA
+            - create new providers
+            - add user test with group Administrators
+        - realm_CustomerB
+            - create new providers
+
+    - domain partitions
+        - Partition-Products-CustomerA
+            - AppTemplateProduct
+            - realm_CustomerA
+            - virtual targets
+                - CustomerA
+            - Override resources
+                - JDBC
+        - Control start Partition-Products-CustomerA
+
+        - Partition-Products-CustomerB
+            - AppTemplateProduct
+            - realm_CustomerB
+            - virtual targets
+                - CustomerB
+            - Override resources
+                - JDBC
+        - Control start Partition-Products-CustomerB
+
+- CustomerA
+    - http://10.10.10.100:8011/customer_a/Product-context-root/jersey/products
+    - http://10.10.10.200:8011/customer_a/Product-context-root/jersey/products
+- CustomerB
+    - http://10.10.10.100:8001/customer_b/Product-context-root/jersey/products
+    - http://10.10.10.200:8001/customer_b/Product-context-root/jersey/products
+
+- WLST
+   - connect('test','weblogic1','t3://10.10.10.100:8011/customer_a')
+
+- JConsole
+   - service:jmx:t3://10.10.10.100:8011/customer_a/jndi/weblogic.management.mbeanservers.runtime

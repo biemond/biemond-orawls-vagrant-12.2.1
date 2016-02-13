@@ -315,8 +315,8 @@ machines_instances:
 
 
 server_vm_args_memory:         &server_vm_args_memory          '-Xms752m'
-server_vm_args_max_memory:     &server_vm_args_max_memory      '-Xmx752m'
-# server_vm_resource_management: &server_vm_resource_management  '-XX:+UnlockCommercialFeatures -XX:+ResourceManagement'
+server_vm_args_max_memory:     &server_vm_args_max_memory      '-Xmx1024m'
+server_vm_resource_management: &server_vm_resource_management  '-XX:+UseG1GC -XX:+UnlockCommercialFeatures -XX:+ResourceManagement -XX:ResourceManagementSampleInterval=30000'
 
 # wlsServer1 & 2 can also be added to cluster by the server_parameters on wls_server
 # this way you don't need to use servers at wls_cluster
@@ -363,7 +363,7 @@ server_instances:
   'wlsServer1':
     ensure:                                'present'
     arguments:
-           # - *server_vm_resource_management
+           - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer1.out'
@@ -390,7 +390,7 @@ server_instances:
   'wlsServer2':
     ensure:                                'present'
     arguments:
-           # - *server_vm_resource_management
+           - *server_vm_resource_management
            - *server_vm_args_memory
            - *server_vm_args_max_memory
            - '-Dweblogic.Stdout=/var/log/weblogic/wlsServer2.out'
@@ -491,6 +491,7 @@ server_channel_instances:
 
 # inherited servers by using server_parameters on wls_servers
 # instead of defining on wls_cluster by using server parameter on wls_cluster
+# use in that case servers: 'inherited'
 cluster_instances:
   'WebCluster':
     ensure:                     'present'
