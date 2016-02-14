@@ -15,7 +15,7 @@ uriprefix        = '<%= uriprefix %>'
 edit()
 startEdit()
 
-def set_target(targets, targettypes):
+def target_list(targets, targettypes):
     targetList = []
     for i in range(len(targets)):
         bean = ObjectName('com.bea:Name=' + targets[i] + ',Type='+targettypes[i])
