@@ -51,7 +51,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                   '--verbose',
                                   '--report',
                                   '--trace',
-#                                  '--debug',
+                                  '--debug',
 #                                  '--parser future',
                                   '--strict_variables',
                                   '--hiera_config /vagrant/puppet/hiera.yaml'

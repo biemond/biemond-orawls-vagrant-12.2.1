@@ -790,3 +790,27 @@ jms_topic_instances:
      require:
        - Wls_jms_module[jmsClusterModule]
        - Wls_jms_subdeployment[jmsClusterModule:jmsServers]
+
+
+# # 12.2.1 MT
+# virtual_target_instances:
+#   'CustomerA':
+#     ensure:             'present'
+#     channel:            'PartitionChannel'
+#     port:               '8011'
+#     target:             'WebCluster'
+#     targettype:         'Cluster'
+#     uriprefix:          '/customer_a'
+#     virtual_host_names:
+#       - '10.10.10.100'
+#       - '10.10.10.200'
+#   'CustomerB':
+#     ensure:             'present'
+#     channel:            'PartitionChannel'
+#     portoffset:         '5'
+#     target:             'WebCluster'
+#     targettype:         'Cluster'
+#     uriprefix:          '/customer_b'
+#     virtual_host_names:
+#       - '10.10.10.100'
+#       - '10.10.10.200'

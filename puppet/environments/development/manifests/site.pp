@@ -22,6 +22,7 @@ node 'admin.example.com' {
   include workmanagers
   include file_persistence
   include jms
+  include mt
   include pack_domain
   include deployments
 
@@ -408,8 +409,17 @@ class jms{
   create_resources('wls_saf_imported_destination_object',$saf_imported_destination_object_instances, $default_params)
 }
 
-class pack_domain{
+class mt{
   require jms
+
+  $default_params = {}
+  $virtual_target_instances = hiera('virtual_target_instances', {})
+  create_resources('wls_virtual_target',$virtual_target_instances, $default_params)
+
+}
+
+class pack_domain{
+  require mt
 
   $default_params = {}
   $pack_domain_instances = hiera('pack_domain_instances', $default_params)
