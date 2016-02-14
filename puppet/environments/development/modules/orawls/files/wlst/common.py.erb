@@ -29,7 +29,6 @@ def password_to_string(value):
             string_value = string_value + chr(byte)
         return string_value
 
-
 def decrypt_value(encrypted_value):
     domain_dir = get('RootDirectory')
     domain_dir_path = os.path.abspath(domain_dir)
