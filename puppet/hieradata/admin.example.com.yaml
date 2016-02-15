@@ -232,7 +232,7 @@ user_instances:
     password:               'weblogic1'
     authenticationprovider: 'DefaultAuthenticator'
     realm:                  'myrealm'
-    description:            'my test user'
+    description:            'my test user :-)'
   'testuser2':
     ensure:                 'present'
     password:               'weblogic1'
