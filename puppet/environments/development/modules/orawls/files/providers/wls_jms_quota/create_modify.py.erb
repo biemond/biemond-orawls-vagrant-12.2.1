@@ -17,7 +17,8 @@ try:
 
     cd('/')
     cd('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule)
-    cmo.createQuota(name)
+    if wlst_action == 'create':
+        cmo.createQuota(name)
 
     cd('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule+'/Quotas/'+name)
     cmo.setBytesMaximum(long(bytesmaximum))

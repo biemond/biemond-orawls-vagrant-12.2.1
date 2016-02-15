@@ -16,7 +16,10 @@ try:
 
     cd('/')
     cd('/SystemResources/'+jmsmodule)
-    cmo.createSubDeployment(name)
+
+    if wlst_action == 'create':
+        cmo.createSubDeployment(name)
+
     cd('/SystemResources/'+jmsmodule+'/SubDeployments/'+name)
 
     targetList = target_list(String(target).split(","), String(targettype).split(","))

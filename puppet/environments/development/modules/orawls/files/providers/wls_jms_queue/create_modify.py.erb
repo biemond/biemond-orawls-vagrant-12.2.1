@@ -36,10 +36,12 @@ try:
     cd('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule)
 
     if distributed == "1":
-        cmo.createUniformDistributedQueue(name)
+        if wlst_action == 'create':
+            cmo.createUniformDistributedQueue(name)
         jmsWlsType = '/UniformDistributedQueues/'
     else:
-        cmo.createQueue(name)
+        if wlst_action == 'create':
+            cmo.createQueue(name)
         jmsWlsType = '/Queues/'
 
     cd('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule+jmsWlsType+name)

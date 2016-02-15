@@ -3,8 +3,9 @@ real_domain='<%= domain %>'
 
 wlst_action = '<%= wlst_action %>'
 
-name           = '<%= file_persistence_name %>'
-directory      = '<%= directory %>'
+name           = '<%= jdbc_persistence_name %>'
+datasource     = '<%= datasource %>'
+prefix_name    = '<%= prefix_name %>'
 target         = '<%= target %>'
 targettype     = '<%= targettype %>'
 
@@ -13,9 +14,12 @@ startEdit()
 
 try:
     cd('/')
-    cmo.createFileStore(name)
-    cd('/FileStores/'+name)
-    cmo.setDirectory(directory)
+    if wlst_action == 'create':
+        cmo.createJDBCStore(name)
+
+    cd('/JDBCStores/'+name)
+    cmo.setDataSource(getMBean('/SystemResources/'+datasource))
+    cmo.setPrefixName(prefix_name)
     set('Targets', jarray.array([ObjectName('com.bea:Name='+target+',Type='+targettype)], ObjectName))
 
     save()
@@ -28,5 +32,3 @@ except:
     stopEdit('y')
     print "~~~~COMMAND FAILED~~~~"
     raise
-
-

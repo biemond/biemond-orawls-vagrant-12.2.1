@@ -16,8 +16,9 @@ startEdit()
 try:
 
     cd('/')
-    print 'Create Coherence Server';
-    cmo.createCoherenceServer(name)
+    if wlst_action == 'create':
+        print 'Create Coherence Server';
+        cmo.createCoherenceServer(name)
 
     cd('/CoherenceServers/'+name)
 

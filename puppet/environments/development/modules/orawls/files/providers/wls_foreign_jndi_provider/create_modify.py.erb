@@ -18,7 +18,9 @@ startEdit()
 try:
 
     cd('/')
-    cmo.createForeignJNDIProvider(name)
+    if wlst_action == 'create':
+        cmo.createForeignJNDIProvider(name)
+
     cd('/ForeignJNDIProviders/' + name)
     cmo.setName(name)
 
@@ -33,8 +35,6 @@ try:
 
     if password:
         cmo.setPassword(password)
-
-    cd('/ForeignJNDIProviders/' + name)
 
     targetList = target_list(String(target).split(","), String(targettype).split(","))
     set('Targets', targetList)

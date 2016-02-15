@@ -20,7 +20,10 @@ startEdit()
 try:
 
     cd('/')
-    cmo.createJMSBridgeDestination(name)
+
+    if wlst_action == 'create':
+        cmo.createJMSBridgeDestination(name)
+
     cd('/JMSBridgeDestinations/' + name)
     cmo.setName(name)
     cmo.setAdapterJNDIName(adapter)

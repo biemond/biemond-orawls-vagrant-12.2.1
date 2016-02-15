@@ -36,10 +36,12 @@ try:
     cd('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule)
 
     if distributed == "1":
-        cmo.createUniformDistributedTopic(name)
+        if wlst_action == 'create':
+            cmo.createUniformDistributedTopic(name)
         jmsWlsType = '/UniformDistributedTopics/'
     else:
-        cmo.createTopic(name)
+        if wlst_action == 'create':
+            cmo.createTopic(name)
         jmsWlsType = '/Topics/'
 
     cd('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule+jmsWlsType+name)
@@ -113,7 +115,7 @@ try:
 
     print "errorbean "+'/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule+'/'+jmsErrType+'/'+errordestination
     if errordestination:
-        cmo.setErrorDestination(getMBean('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule+'/'+jmsErrType+'/'+errordestination))
+      cmo.setErrorDestination(getMBean('/JMSSystemResources/'+jmsmodule+'/JMSResource/'+jmsmodule+'/'+jmsErrType+'/'+errordestination))
 
     if expirationloggingpolicy:
       cmo.setExpirationLoggingPolicy(expirationloggingpolicy)

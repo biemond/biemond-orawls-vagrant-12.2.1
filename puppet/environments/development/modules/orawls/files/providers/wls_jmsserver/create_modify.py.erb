@@ -23,7 +23,8 @@ try:
     cd('/')
     version = get('DomainVersion')
 
-    cmo.createJMSServer(name)
+    if wlst_action == 'create':
+      cmo.createJMSServer(name)
 
     cd('/JMSServers/'+name)
 
@@ -62,7 +63,6 @@ try:
 
     set('Targets', jarray.array([ObjectName('com.bea:Name='+target+',Type='+targettype)], ObjectName))
 
-
     save()
     activate()
     print "~~~~COMMAND SUCCESFULL~~~~"
@@ -73,6 +73,3 @@ except:
     stopEdit('y')
     print "~~~~COMMAND FAILED~~~~"
     raise
-
-
-

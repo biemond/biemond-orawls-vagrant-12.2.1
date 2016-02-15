@@ -21,8 +21,9 @@ startEdit()
 try:
 
     cd('/')
-    print 'Create Coherence Cluster';
-    cmo.createCoherenceClusterSystemResource(name)
+    if wlst_action == 'create':
+        print 'Create Coherence Cluster';
+        cmo.createCoherenceClusterSystemResource(name)
 
     coherence_cluster = getMBean('/CoherenceClusterSystemResources/'+name)
 
