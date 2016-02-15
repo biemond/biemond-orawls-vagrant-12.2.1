@@ -63,6 +63,7 @@ module Puppet
     end
 
     on_create  do | command_builder |
+      wlst_action = 'create'
       Puppet.info "create #{name} "
       environment = { 'action' => 'create', 'type' => 'wls_cluster'}
       # all_actions = Array.new
@@ -102,6 +103,7 @@ module Puppet
     end
 
     on_modify  do | command_builder |
+      wlst_action = 'modify'
       Puppet.info "modify #{name} "
 
       environment = { 'action' => 'modify', 'type' => 'wls_cluster'}
