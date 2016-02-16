@@ -42,7 +42,7 @@ edit Vagrantfile and update the software share
 
 - vagrant ssh admin
 - sudo -i
-- /opt/puppetlabs/bin/puppet apply --verbose --report --trace /vagrant/puppet/manifests/development/site.pp
+- puppet apply --verbose --report --trace /vagrant/puppet/environments/development/manifests/site.pp
 
 
 ### rest application on cluster
