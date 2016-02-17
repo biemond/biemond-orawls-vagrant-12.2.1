@@ -939,8 +939,8 @@ mail_session_instances:
 virtual_target_instances:
   'CustomerA':
     ensure:             'present'
-    channel:            'PartitionChannel'
     port:               '8011'
+    # portoffset:         '6'
     target:             'WebCluster'
     targettype:         'Cluster'
     uriprefix:          '/customer_a'
