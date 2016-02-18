@@ -36,7 +36,8 @@ try:
     set_attribute_value('LocalJNDIName', localjndiname)
     set_attribute_value('UnitOfOrderRouting', unitoforderrouting)
 
-    set_attribute_value('TimeToLiveDefault', long(timetolivedefault))
+    if timetolivedefault:
+        set_attribute_value('TimeToLiveDefault', long(timetolivedefault))
     set_attribute_value('UseSAFTimeToLiveDefault', usetimetolivedefault)
 
     save()

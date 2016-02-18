@@ -34,7 +34,8 @@ try:
     else:
       cmo.setSAFErrorHandling(None)
 
-    set_attribute_value('TimeToLiveDefault', long(timetolivedefault))
+    if timetolivedefault:
+      set_attribute_value('TimeToLiveDefault', long(timetolivedefault))
     set_attribute_value('UseSAFTimeToLiveDefault', usetimetolivedefault)
     set_attribute_value('DefaultTargetingEnabled', defaulttargeting)
 
