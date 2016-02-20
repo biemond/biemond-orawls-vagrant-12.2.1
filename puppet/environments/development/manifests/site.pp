@@ -419,6 +419,11 @@ class mt{
   $virtual_target_instances = hiera('virtual_target_instances', {})
   create_resources('wls_virtual_target',$virtual_target_instances, $default_params)
 
+  $resource_group_template_instances = hiera('resource_group_template_instances', {})
+  create_resources('wls_resource_group_template',$resource_group_template_instances, $default_params)
+
+  $resource_group_instances = hiera('resource_group_instances', {})
+  create_resources('wls_resource_group',$resource_group_instances, $default_params)
 }
 
 class pack_domain{

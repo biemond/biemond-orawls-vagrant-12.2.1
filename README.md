@@ -55,7 +55,7 @@ edit Vagrantfile and update the software share
 - undeploy jerser-bundle-1.18.war and webapp.war from WebCluster
 
 
-- Resource Template
+- Resource Group Template
     - AppTemplateProduct
 
 - Deployments to AppTemplateProduct Resource Template
@@ -110,7 +110,8 @@ for every tenant
 
     - domain partitions
         - Partition-Products-CustomerA
-            - AppTemplateProduct
+            - ResourceGroupA
+                - AppTemplateProduct
             - realm_CustomerA
             - virtual targets
                 - CustomerA
@@ -119,7 +120,8 @@ for every tenant
         - Control start Partition-Products-CustomerA
 
         - Partition-Products-CustomerB
-            - AppTemplateProduct
+            - ResourceGroupA
+                - AppTemplateProduct
             - realm_CustomerB
             - virtual targets
                 - CustomerB
