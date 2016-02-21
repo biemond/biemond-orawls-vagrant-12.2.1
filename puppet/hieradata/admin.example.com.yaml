@@ -967,6 +967,15 @@ virtual_target_instances:
     virtual_host_names:
       - '10.10.10.100'
       - '10.10.10.200'
+  'VT_AdminServer':
+    ensure:             'present'
+    channel:            'PartitionChannel'
+    port:               '7011'
+    target:             'AdminServer'
+    targettype:         'Server'
+    uriprefix:          '/adminserver'
+    virtual_host_names:
+      - '10.10.10.10'
 
 resource_group_template_instances:
   'AppTemplate1':
@@ -977,7 +986,51 @@ resource_group_template_instances:
 resource_group_instances:
   'ResourceGroup':
     ensure:                   'present'
-  'ResourceGroupForVT_Global':
-    ensure:                   'present'
-    resource_group_template:  'AppTemplate2'
-    virtual_target:           'VT_Global'
+  # 'ResourceGroupForAll':
+  #   ensure:                   'present'
+  #   resource_group_template:  'AppTemplate2'
+  #   virtual_target:
+  #     - 'VT_Global'
+  #     - 'VT_AdminServer'
+
+wls_domain_partition_instances:
+  'Global_Partition':
+    ensure:           'present'
+    root_file_system: '/opt/oracle/wlsdomains/domains/Wls1221/partitions/GlobalPartition/system'
+    virtual_target:
+      - 'VT_AdminServer'
+      - 'VT_Global'
+  'CustomerA_Partition':
+    ensure:           'present'
+    root_file_system: '/opt/oracle/wlsdomains/domains/Wls1221/partitions/CustomerAPartition/system'
+    virtual_target:
+      - 'VT_CustomerA'
+  'CustomerB_Partition':
+    ensure:           'present'
+    root_file_system: '/opt/oracle/wlsdomains/domains/Wls1221/partitions/CustomerBPartition/system'
+    virtual_target:
+      - 'VT_CustomerB'
+
+# subscribe on a partition change and restart the adminserver
+wls_adminserver_instances_partitions:
+  'AdminServer_Wls1221_partition':
+    ensure:                    'running'
+    server_name:               *domain_adminserver
+    domain_name:               *domain_name
+    domain_path:               "/opt/oracle/wlsdomains/domains/Wls1221"
+    os_user:                   *wls_os_user
+    weblogic_home_dir:         *wls_weblogic_home_dir
+    weblogic_user:             *wls_weblogic_user
+    weblogic_password:         *domain_wls_password
+    jdk_home_dir:              '/usr/java/latest'
+    nodemanager_address:       *domain_adminserver_address
+    nodemanager_port:          *domain_nodemanager_port
+    jsse_enabled:              true
+    custom_trust:              *wls_custom_trust
+    trust_keystore_file:       *wls_trust_keystore_file
+    trust_keystore_passphrase: *wls_trust_keystore_passphrase
+    refreshonly:               true
+    subscribe:
+      - Wls_domain_partition[Global_Partition]
+      - Wls_domain_partition[CustomerA_Partition]
+      - Wls_domain_partition[CustomerB_Partition]
