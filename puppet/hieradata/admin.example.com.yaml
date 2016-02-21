@@ -1011,6 +1011,23 @@ wls_domain_partition_instances:
     virtual_target:
       - 'VT_CustomerB'
 
+wls_domain_partition_resource_group_instances:
+  'CustomerA_Partition:PartitionResourceGroupProducts':
+    ensure:                  'present'
+    resource_group_template: 'AppTemplate1'
+    virtual_target:
+      - 'VT_CustomerA'
+  'CustomerB_Partition:PartitionResourceGroupProducts':
+    ensure:                  'present'
+    resource_group_template: 'AppTemplate1'
+    virtual_target:
+      - 'VT_CustomerB'
+  'Global_Partition:PartitionResourceGroup1':
+    ensure:                  'present'
+    virtual_target:
+      - 'VT_AdminServer'
+      - 'VT_Global'
+
 # subscribe on a partition change and restart the adminserver
 wls_adminserver_instances_partitions:
   'AdminServer_Wls1221_partition':

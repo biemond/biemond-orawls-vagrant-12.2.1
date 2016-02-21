@@ -432,6 +432,10 @@ class mt{
   $wls_adminserver_instances_partitions = hiera('wls_adminserver_instances_partitions', {})
   create_resources('wls_adminserver',$wls_adminserver_instances_partitions, $default_params)
 
+  $wls_domain_partition_resource_group_instances = hiera('wls_domain_partition_resource_group_instances', {})
+  create_resources('wls_domain_partition_resource_group',$wls_domain_partition_resource_group_instances, $default_params)
+
+
 }
 
 class pack_domain{
