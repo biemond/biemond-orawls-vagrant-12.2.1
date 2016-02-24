@@ -67,28 +67,29 @@ domain_instances:
 
 wls_setting_instances:
   'default':
-    user:                      *wls_os_user
-    weblogic_home_dir:         *wls_weblogic_home_dir
-    # connect_url:               "t3://%{hiera('domain_adminserver_address')}:7001"
-    connect_url:               "t3s://%{hiera('domain_adminserver_address')}:7002"
-    weblogic_user:             *wls_weblogic_user
-    weblogic_password:         *domain_wls_password
-    custom_trust:              *wls_custom_trust
-    trust_keystore_file:       *wls_trust_keystore_file
-    trust_keystore_passphrase: *wls_trust_keystore_passphrase
-    require:                   Orawls::Domain[Wls1221]
-    debug_module:              true
-    archive_path:              '/var/tmp/install/default_domain'
+    user:                         *wls_os_user
+    weblogic_home_dir:            *wls_weblogic_home_dir
+    # connect_url:                  "t3://%{hiera('domain_adminserver_address')}:7001"
+    connect_url:                  "t3s://%{hiera('domain_adminserver_address')}:7002"
+    weblogic_user:                *wls_weblogic_user
+    weblogic_password:            *domain_wls_password
+    custom_trust:                 *wls_custom_trust
+    trust_keystore_file:          *wls_trust_keystore_file
+    trust_keystore_passphrase:    *wls_trust_keystore_passphrase
+    require:                      Orawls::Domain[Wls1221]
+    debug_module:                 true
+    archive_path:                 '/var/tmp/install/default_domain'
+    use_default_value_when_empty: true
     # post_classpath:            '/opt/oracle/middleware12c/wlserver/modules/features/wlst.wls.classpath.jar'
   'plain':
-    user:                      *wls_os_user
-    weblogic_home_dir:         *wls_weblogic_home_dir
-    connect_url:               "t3://%{hiera('domain_adminserver_address')}:7101"
-    weblogic_user:             *wls_weblogic_user
-    weblogic_password:         *domain_wls_password
-    require:                   Orawls::Domain[plain_Wls]
-    debug_module:              false
-
+    user:                         *wls_os_user
+    weblogic_home_dir:            *wls_weblogic_home_dir
+    connect_url:                  "t3://%{hiera('domain_adminserver_address')}:7101"
+    weblogic_user:                *wls_weblogic_user
+    weblogic_password:            *domain_wls_password
+    require:                      Orawls::Domain[plain_Wls]
+    debug_module:                 false
+    use_default_value_when_empty: false
 
 # pack domains
 pack_domain_instances:
