@@ -994,7 +994,7 @@ resource_group_instances:
   #     - 'VT_Global'
   #     - 'VT_AdminServer'
 
-wls_domain_partition_instances:
+domain_partition_instances:
   'Global_Partition':
     ensure:           'present'
     root_file_system: '/opt/oracle/wlsdomains/domains/Wls1221/partitions/GlobalPartition/system'
@@ -1012,7 +1012,7 @@ wls_domain_partition_instances:
     virtual_target:
       - 'VT_CustomerB'
 
-wls_domain_partition_resource_group_instances:
+domain_partition_resource_group_instances:
   'CustomerA_Partition:PartitionResourceGroupProducts':
     ensure:                  'present'
     resource_group_template: 'AppTemplate1'
@@ -1030,7 +1030,7 @@ wls_domain_partition_resource_group_instances:
       - 'VT_Global'
 
 # subscribe on a partition change and restart the adminserver
-wls_adminserver_instances_partitions:
+adminserver_instances_partitions:
   'AdminServer_Wls1221_partition':
     ensure:                    'running'
     server_name:               *domain_adminserver
@@ -1052,3 +1052,42 @@ wls_adminserver_instances_partitions:
       - Wls_domain_partition[Global_Partition]
       - Wls_domain_partition[CustomerA_Partition]
       - Wls_domain_partition[CustomerB_Partition]
+
+resource_group_template_deployment_instances:
+  'AppTemplate1:jersey-bundle':
+    ensure:            'present'
+    deploymenttype:    'Library'
+    versionidentifier: '1.18@1.18.0.0'
+    timeout:           120
+    remote:            "1"
+    upload:            "1"
+    localpath:         '/vagrant/jersey-bundle-1.18.war'
+  'AppTemplate1:webapp':
+    ensure:            'present'
+    deploymenttype:    'AppDeployment'
+    timeout:           120
+    remote:            "1"
+    upload:            "1"
+    localpath:         '/vagrant/webapp.war'
+    require:
+       - Wls_resource_group_template_deployment[AppTemplate1:jersey-bundle]
+
+
+# domain_partition_resource_group_deployment_instances:
+#   'CustomerA_Partition:PartitionResourceGroupProducts:jersey-bundle':
+#     ensure:            'present'
+#     deploymenttype:    'Library'
+#     versionidentifier: '1.18@1.18.0.0'
+#     timeout:           120
+#     remote:            "1"
+#     upload:            "1"
+#     localpath:         '/vagrant/jersey-bundle-1.18.war'
+#   'CustomerA_Partition:PartitionResourceGroupProducts:webapp':
+#     ensure:            'present'
+#     deploymenttype:    'AppDeployment'
+#     timeout:           120
+#     remote:            "1"
+#     upload:            "1"
+#     localpath:         '/vagrant/webapp.war'
+#     require:
+#        - Wls_domain_partition_resource_group_deployment[CustomerA_Partition:PartitionResourceGroupProducts:jersey-bundle]
