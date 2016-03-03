@@ -576,34 +576,34 @@ deployment_instances:
 
 
 
-datasource_instances:
-    'hrDS':
-      ensure:                      'present'
-      drivername:                  'oracle.jdbc.xa.client.OracleXADataSource'
-      extraproperties:
-        - 'SendStreamAsBlob=true'
-        - 'oracle.net.CONNECT_TIMEOUT=10001'
-      globaltransactionsprotocol:  'TwoPhaseCommit'
-      shrinkfrequencyseconds:      '600'
-      initialcapacity:             '2'
-      jndinames:
-        - 'jdbc/hrDS'
-        - 'jdbc/hrDS2'
-      maxcapacity:                 '30'
-      target:
-        - 'wlsServer1'
-        - 'wlsServer2'
-      targettype:
-        - 'Server'
-        - 'Server'
-      testtablename:               'SQL SELECT 1 FROM DUAL'
-      url:                         "jdbc:oracle:thin:@dbagent2.alfa.local:1521/test.oracle.com"
-      user:                        'hr'
-      password:                    'hr'
-      usexa:                       '1'
-      require:
-        - Wls_server[wlsServer1]
-        - Wls_server[wlsServer2]
+# datasource_instances:
+#     'hrDS':
+#       ensure:                      'present'
+#       drivername:                  'oracle.jdbc.xa.client.OracleXADataSource'
+#       extraproperties:
+#         - 'SendStreamAsBlob=true'
+#         - 'oracle.net.CONNECT_TIMEOUT=10001'
+#       globaltransactionsprotocol:  'TwoPhaseCommit'
+#       shrinkfrequencyseconds:      '600'
+#       initialcapacity:             '2'
+#       jndinames:
+#         - 'jdbc/hrDS'
+#         - 'jdbc/hrDS2'
+#       maxcapacity:                 '30'
+#       target:
+#         - 'wlsServer1'
+#         - 'wlsServer2'
+#       targettype:
+#         - 'Server'
+#         - 'Server'
+#       testtablename:               'SQL SELECT 1 FROM DUAL'
+#       url:                         "jdbc:oracle:thin:@dbagent2.alfa.local:1521/test.oracle.com"
+#       user:                        'hr'
+#       password:                    'hr'
+#       usexa:                       '1'
+#       require:
+#         - Wls_server[wlsServer1]
+#         - Wls_server[wlsServer2]
 
 file_persistence_folders:
    '/opt/oracle/wlsdomains/domains/Wls1221/persistence1':
@@ -865,17 +865,17 @@ safagent_instances:
           - 'Server'
         servicetype:         'Both'
 
-virtual_host_instances:
- 'WS':
-   ensure:     'present'
-   channel:    'HTTP'
-   target:
-     - 'WebCluster'
-   targettype:
-     - 'Cluster'
-   virtual_host_names:
-     - 'admin.example.com'
-     - '10.10.10.10'
+# virtual_host_instances:
+#  'WS':
+#    ensure:     'present'
+#    channel:    'HTTP'
+#    target:
+#      - 'WebCluster'
+#    targettype:
+#      - 'Cluster'
+#    virtual_host_names:
+#      - 'admin.example.com'
+#      - '10.10.10.10'
 
 workmanager_instances:
   'WorkManagerConstraints':
@@ -951,7 +951,7 @@ virtual_target_instances:
   'VT_CustomerB':
     ensure:             'present'
     channel:            'PartitionChannel'
-    port:               '8001'
+    port:               '8021'
     target:             'WebCluster'
     targettype:         'Cluster'
     uriprefix:          '/customer_b'
@@ -961,7 +961,7 @@ virtual_target_instances:
   'VT_Global':
     ensure:             'present'
     channel:            'PartitionChannel'
-    port:               '8021'
+    port:               '8031'
     target:             'WebCluster'
     targettype:         'Cluster'
     uriprefix:          '/global'

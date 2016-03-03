@@ -133,8 +133,8 @@ for every tenant
     - http://10.10.10.100:8011/customer_a/Product-context-root/jersey/products
     - http://10.10.10.200:8011/customer_a/Product-context-root/jersey/products
 - CustomerB
-    - http://10.10.10.100:8001/customer_b/Product-context-root/jersey/products
-    - http://10.10.10.200:8001/customer_b/Product-context-root/jersey/products
+    - http://10.10.10.100:8021/customer_b/Product-context-root/jersey/products
+    - http://10.10.10.200:8021/customer_b/Product-context-root/jersey/products
 
 - WLST
    - connect('test','weblogic1','t3://10.10.10.100:8011/customer_a')
