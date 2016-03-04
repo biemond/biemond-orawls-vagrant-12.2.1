@@ -72,13 +72,13 @@ orawls::weblogic::wls_apps_dir:         *wls_apps_dir
 # fmw_installations:
 
 # opatch_instances:
-#   '20838345':
+#   '22331568':
+#     ensure:                   'present'
 #     oracle_product_home_dir:  *wls_middleware_home_dir
-#     patch_id:                 "20838345"
-#     patch_file:               "p20838345_121300_Generic.zip"
+#     patch_id:                 "22331568"
+#     patch_file:               "p22331568_122100_Generic.zip"
 #     log_output:               true
 #     remote_file:              false
-
 
 
 # handy WebLogic scripts in /opt/scripts/wls
