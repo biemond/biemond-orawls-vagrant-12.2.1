@@ -441,7 +441,8 @@ class mt{
   $domain_partition_resource_group_deployment_instances = hiera('domain_partition_resource_group_deployment_instances', $default_params)
   create_resources('wls_domain_partition_resource_group_deployment',$domain_partition_resource_group_deployment_instances, $default_params)
 
-
+  $control_domain_partitions_instances = hiera('control_domain_partitions_instances', {})
+  create_resources('wls_domain_partition_control',$control_domain_partitions_instances, $default_params)
 }
 
 class pack_domain{

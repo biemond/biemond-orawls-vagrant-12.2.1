@@ -1091,3 +1091,27 @@ resource_group_template_deployment_instances:
 #     localpath:         '/vagrant/webapp.war'
 #     require:
 #        - Wls_domain_partition_resource_group_deployment[CustomerA_Partition:PartitionResourceGroupProducts:jersey-bundle]
+
+# control_domain_partitions_instances:
+#   'StartCustomerA_Partition':
+#      ensure:                      'start'
+#      domain_partition:            'CustomerA_Partition'
+#      os_user:                     *wls_os_user
+#      middleware_home_dir:         *wls_middleware_home_dir
+#      weblogic_user:               *wls_weblogic_user
+#      weblogic_password:           *domain_wls_password
+#      adminserver_address:         *domain_adminserver_address
+#      adminserver_port:            *domain_adminserver_port
+#      require:
+#         - Wls_domain_partition[CustomerA_Partition]
+#   'StartCustomerB_Partition':
+#      ensure:                      'start'
+#      domain_partition:            'CustomerB_Partition'
+#      os_user:                     *wls_os_user
+#      middleware_home_dir:         *wls_middleware_home_dir
+#      weblogic_user:               *wls_weblogic_user
+#      weblogic_password:           *domain_wls_password
+#      adminserver_address:         *domain_adminserver_address
+#      adminserver_port:            *domain_adminserver_port
+#      require:
+#         - Wls_domain_partition[CustomerB_Partition]
