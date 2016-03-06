@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin.vm.provider :vmware_fusion do |v, override|
       override.vm.box = "centos-7-1511-x86_64-vmware"
       override.vm.box_url = "https://dl.dropboxusercontent.com/s/h5g5kqjrzq5dn53/centos-7-1511-x86_64-vmware.box"
-      # override.vm.box = "OEL-7.2-x86_64-vmware"
+      # override.vm.box = "OEL7_2-x86_64-vmware"
       # override.vm.box_url = "https://dl.dropboxusercontent.com/s/ymr62ku2vjjdhup/OEL7_2-x86_64-vmware.box"
     end
 
