@@ -14,8 +14,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     admin.vm.provider :vmware_fusion do |v, override|
       override.vm.box = "centos-7-1511-x86_64-vmware"
       override.vm.box_url = "https://dl.dropboxusercontent.com/s/h5g5kqjrzq5dn53/centos-7-1511-x86_64-vmware.box"
-      # override.vm.box = "OEL7_2-x86_64-vmware"
-      # override.vm.box_url = "https://dl.dropboxusercontent.com/s/ymr62ku2vjjdhup/OEL7_2-x86_64-vmware.box"
+      #override.vm.box = "OEL7_2-x86_64-vmware"
+      #override.vm.box_url = "https://dl.dropboxusercontent.com/s/ymr62ku2vjjdhup/OEL7_2-x86_64-vmware.box"
     end
 
     admin.vm.hostname = "admin.example.com"
@@ -70,12 +70,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     node1.vm.box = "centos-7-1511-x86_64"
     node1.vm.box_url = "https://dl.dropboxusercontent.com/s/filvjntyct1wuxe/centos-7-1511-x86_64.box"
 
-
     node1.vm.provider :vmware_fusion do |v, override|
       override.vm.box = "centos-7-1511-x86_64-vmware"
       override.vm.box_url = "https://dl.dropboxusercontent.com/s/h5g5kqjrzq5dn53/centos-7-1511-x86_64-vmware.box"
     end
-
 
     node1.vm.hostname = "node1.example.com"
     node1.vm.synced_folder ".", "/vagrant", :mount_options => ["dmode=777","fmode=777"]
@@ -125,7 +123,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     node2.vm.box = "centos-7-1511-x86_64"
     node2.vm.box_url = "https://dl.dropboxusercontent.com/s/filvjntyct1wuxe/centos-7-1511-x86_64.box"
-
 
     node2.vm.provider :vmware_fusion do |v, override|
       override.vm.box = "centos-7-1511-x86_64-vmware"

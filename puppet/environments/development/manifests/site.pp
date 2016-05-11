@@ -9,7 +9,9 @@ node 'admin.example.com' {
   include os
   include ssh
   include java
-  include orawls::weblogic, orautils, jdk7::urandomfix
+  include orawls::weblogic
+  include orautils, jdk7::urandomfix
+  # include weblogic
   include bsu
   include fmw
   include opatch
@@ -29,6 +31,8 @@ node 'admin.example.com' {
   # include ora_em_agent
 
   Class[java] -> Class[orawls::weblogic]
+  # Jdk7::Install7  <| |> -> Orawls::Weblogic_type <| |>
+
 }
 
 # operating settings for Middleware
@@ -195,6 +199,13 @@ class java {
 
 }
 
+# class weblogic {
+#   require java
+#   $default_params = {}
+#   $weblogic_instances = hiera('weblogic_instances', {})
+#   create_resources('orawls::weblogic_type',$weblogic_instances, $default_params)
+# }
+
 class bsu{
   require orawls::weblogic
   $default_params = {}
@@ -210,14 +221,14 @@ class fmw{
 }
 
 class opatch{
-  require fmw,bsu,orawls::weblogic
+  require fmw, bsu, orawls::weblogic
   $default_params = {}
   $opatch_instances = hiera('opatch_instances', {})
   create_resources('orawls::opatch',$opatch_instances, $default_params)
 }
 
 class domains{
-  require orawls::weblogic, opatch
+  require opatch, orawls::weblogic
 
   $default_params = {}
   $domain_instances = hiera('domain_instances', {})
@@ -229,7 +240,7 @@ class domains{
 }
 
 class nodemanager {
-  require orawls::weblogic, domains
+  require domains
 
   $default_params = {}
   $nodemanager_instances = hiera('nodemanager_instances', {})
@@ -254,7 +265,7 @@ class nodemanager {
 }
 
 class startwls {
-  require orawls::weblogic, domains,nodemanager
+  require domains, nodemanager
 
   $default_params = {}
   $control_instances = hiera('control_instances', {})
@@ -262,7 +273,7 @@ class startwls {
 }
 
 class userconfig{
-  require orawls::weblogic, domains, nodemanager, startwls
+  require domains, nodemanager, startwls
   $default_params = {}
   $userconfig_instances = hiera('userconfig_instances', {})
   create_resources('orawls::storeuserconfig',$userconfig_instances, $default_params)
