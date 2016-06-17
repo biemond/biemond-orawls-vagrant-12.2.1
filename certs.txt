@@ -14,10 +14,10 @@ openssl genrsa -des3 -out ca.key 4096 -rand random
 #self sign ca
 openssl req -new -x509 -days 3650 -config ca.conf -key ca.key -out ca.crt
 
-# make serial.txt
-touch serial.txt
 # make index.txt
-echo "01" >> index.txt
+touch index.txt
+# make serial.txt
+echo "01" >> serial.txt
 
 openssl genrsa -des3 -out admin.key 4096
 openssl req -newkey rsa:2048 -nodes -keyout admin.key -out admin.csr -config ca.conf
