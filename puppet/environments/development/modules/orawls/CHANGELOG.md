@@ -1,7 +1,16 @@
 # History
 
+## 1.0.51
+- add JSSE to wls_daemon when trust is used, this way t3s also works on wls 10.3
+- functionality to run orawls with a non-root user, see [this PR](https://github.com/biemond/biemond-orawls/pull/343)
+
 ## 1.0.50
 - weblogic_type define which support multiple middleware homes on same vm
+- fmwcluster supports now not secure nodemanagers for wls server control
+- fmw install fix for other fmw products than osh
+- osb 12.1.3 cluster adapter target fix
+- jrf domain template fix
+- common template fix when an wls attribute is nil
 
 ## 1.0.49
 - Support for standalone webtier 12.1.2, 12.1.3 & 12.2.1

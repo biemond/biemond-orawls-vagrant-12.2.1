@@ -75,6 +75,7 @@ If you need support, checkout the [wls_install](https://www.enterprisemodules.co
 
 - installs [FMW](#fmw) software(add-on) to a middleware home, like OSB,SOA Suite, Oracle Identity & Access Management, Oracle Unified Directory, WebCenter Portal + Content
 - [WebTier](#webtier) Oracle HTTP server Standalone and Collocated
+- [Configure Oracle HTTP Server](#configure-oracle-http-server)
 - [OSB, SOA Suite](#fmwcluster) with BPM and BAM Cluster configuration support ( convert single osb/soa/bam servers to clusters and migrate 11g OPSS to the database )
 - [ADF/JRF support](#fmwclusterjrf), Assign JRF libraries to a Server or Cluster target
 - [OIM IDM](#oimconfig) / OAM 11.1.2.3 configurations with Oracle OHS OAM WebGate, Also it has Cluster support for OIM OAM
@@ -182,6 +183,8 @@ For all WebLogic or FMW versions
 ## Puppet master with orawls module key points
 it should work on every PE or opensource puppet master, customers and I successfully tested orawls on PE 3.0, 3.1, 3.2, 3.3. See also the puppet master vagrant box
 
+For Running orawls module without root/elevated privileges, please use v3.7.0 or higher
+
 But when it fails you can do the following actions.
 - Check the time difference/timezone between all the puppet master and agent machines.
 - Update orawls and its dependencies on the puppet master.
@@ -202,6 +205,16 @@ Contains WebLogic Facter which displays the following
 
 default this orawls module uses oracle as weblogic install user
 you can override this by setting the following fact 'override_weblogic_user', like override_weblogic_user=wls or set FACTER_override_weblogic_user=wls
+
+## Override the default file location where orawls saves domain & other settings (Applicable for running as non-root user)
+
+default this orawls module saves the domain & connection related setting in /etc in yaml format
+you can override this by setting the following 2 facts:
+for domain information: override_wls_domains_file=[custom_path]/wls_domains.yaml 
+or set FACTER_override_wls_domains_file=[custom_path]/wls_domains.yaml
+
+for settings infortmation: override_wls_setting_file=[custom_path]/wls_setting.yaml
+or set FACTER_override_wls_setting_file=[custom_path]/wls_setting.yaml
 
 ## Override the default WebLogic domain folder
 
@@ -1611,6 +1624,30 @@ Example:
 
 In the case of the wls_datasource type, the jdbc connection will be targetted on
 the cluster if the managed server is in a cluster.
+
+
+### Configure Oracle HTTP Server
+
+You can configure OHS rewrites and locations using __orawls::ohs::config__ resource:
+
+    orawls::ohs::config { 'default':
+      server_name => 'ohs1',
+      domain_path => '/opt/oracle/middleware12c/user_projects/domains/domain_name',
+      owner       => 'oracle',
+      group       => 'dba',
+      rewrites    => {
+        '^/mail$' => {
+          'to'      => 'http://mail.domain.com',
+          'options' => 'R',
+        },
+      },
+      locations   => {
+        '/application' => ['192.168.1.1:7001'],
+      },
+    }
+
+OHS will include all __.conf__ files at ${domain_path}/config/fmwconfig/components/OHS/instances/${server_name}/mod_wl_ohs.d folder.
+
 
 ### fmwlogdir
 __orawls::fmwlogdir__ Change a log folder location of a FMW server
