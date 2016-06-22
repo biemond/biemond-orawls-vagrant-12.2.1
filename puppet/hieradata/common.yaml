@@ -31,7 +31,7 @@ wls_oracle_base_home_dir: &wls_oracle_base_home_dir "/opt/oracle"
 wls_weblogic_user:        &wls_weblogic_user        "weblogic"
 wls_weblogic_home_dir:    &wls_weblogic_home_dir    "/opt/oracle/middleware12c/wlserver"
 wls_middleware_home_dir:  &wls_middleware_home_dir  "/opt/oracle/middleware12c"
-wls_version:              &wls_version              1221
+wls_version:              &wls_version              12211
 
 # global OS vars
 wls_os_user:              &wls_os_user              "oracle"
