@@ -80,6 +80,7 @@ wls_setting_instances:
     debug_module:                 true
     archive_path:                 '/var/tmp/install/default_domain'
     use_default_value_when_empty: true
+    extra_arguments:              '-Daa=1 -Dbb=2'
     # post_classpath:            '/opt/oracle/middleware12c/wlserver/modules/features/wlst.wls.classpath.jar'
   'plain':
     user:                         *wls_os_user

@@ -11,7 +11,7 @@ wls_middleware_home_dir:  &wls_middleware_home_dir  "/opt/oracle/middleware12c"
 # when you have just one domain on a server
 domain_name:                &domain_name                "Wls1221"
 domain_adminserver:         &domain_adminserver         "AdminServer"
-domain_adminserver_port:    &domain_adminserver_port    7001
+domain_adminserver_port:    &domain_adminserver_port    7002
 domain_nodemanager_port:    &domain_nodemanager_port    5556
 domain_wls_password:        &domain_wls_password        "weblogic1"
 
@@ -41,6 +41,7 @@ wls_trust_keystore_passphrase:     &wls_trust_keystore_passphrase 'welcome'
 copy_instances:
   'wlsDomain':
      log_output:              *logoutput
+     use_t3s:                 true
 
 # create and startup the nodemanager
 nodemanager_instances:
