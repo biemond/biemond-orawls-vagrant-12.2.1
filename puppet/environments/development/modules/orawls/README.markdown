@@ -93,6 +93,7 @@ This will use WLST to retrieve the current state and to the changes. With WebLog
 - [wls_setting](#wls_setting), set the default wls parameters for the other types and also used by puppet resource
 - [wls_adminserver](#wls_adminserver) control the adminserver or subscribe to changes
 - [wls_managedserver](#wls_managedserver) control the managed server,cluster or subscribe to changes
+- [wls_ohsserver](#wls_ohsserver) control the ohs standalone server or subscribe to changes
 - [wls_domain](#wls_domain)
 - [wls_deployment](#wls_deployment)
 - [wls_domain](#wls_domain)
@@ -496,10 +497,10 @@ common.yaml
 ## WebLogic Module Usage
 
 ### weblogic
-__orawls::weblogic__ installs WebLogic 10.3.[0-6], 12.1.1, 12.1.2, 12.1.3, 12.2.1
+__orawls::weblogic__ installs WebLogic 10.3.[0-6], 12.1.1, 12.1.2, 12.1.3, 12.2.1, 12.2.1.2
 
     class{'orawls::weblogic':
-      version              => 12211,                       # 1036|1211|1212|1213|1221
+      version              => 12211,                       # 1036|1211|1212|1213|1221|12212
       filename             => 'fmw_12.2.1.0.0_wls.jar',   # wls1036_generic.jar|wls1211_generic.jar|wls_121200.jar
       jdk_home_dir         => '/usr/java/jdk1.8.0_45',
       oracle_base_home_dir => "/opt/oracle",
@@ -586,7 +587,7 @@ vagrantcentos64.example.com.yaml
 __orawls::weblogic_type__ same as weblogic manifest/class but now as define which supports multiple middleware home on same VM
 
     orawls::weblogic{'1221':
-      version              => 12211,                       # 1036|1211|1212|1213|1221
+      version              => 12211,                       # 1036|1211|1212|1213|1221|12212
       filename             => 'fmw_12.2.1.0.0_wls.jar',   # wls1036_generic.jar|wls1211_generic.jar|wls_121200.jar
       jdk_home_dir         => '/usr/java/jdk1.8.0_45',
       oracle_base_home_dir => "/opt/oracle",
@@ -1403,7 +1404,7 @@ here is an overview of all the parameters you can set with its defaults
 
 
 ### control
-__orawls::control__ start or stops the AdminServer,Managed Server or a Cluster of a WebLogic Domain, this will call the wls_managedserver and wls_adminserver types
+__orawls::control__ start or stops the AdminServer,Managed Server, OHS Standalone Server or a Cluster of a WebLogic Domain, this will call the wls_managedserver, wls_adminserver and wls_ohsserver types
 
     orawls::control{'startWLSAdminServer12c':
       domain_name                 => "Wls12c",
@@ -1648,26 +1649,22 @@ the cluster if the managed server is in a cluster.
 
 ### Configure Oracle HTTP Server
 
-You can configure OHS rewrites and locations using __orawls::ohs::config__ resource:
+You can configure OHS locations using __orawls::ohs::forwarder__ resource:
 
-    orawls::ohs::config { 'default':
-      server_name => 'ohs1',
-      domain_path => '/opt/oracle/middleware12c/user_projects/domains/domain_name',
+    orawls::ohs::forwarder { '/console':
+      servers     => ['192.168.1.1:7000'],
       owner       => 'oracle',
-      group       => 'dba',
-      rewrites    => {
-        '^/mail$' => {
-          'to'      => 'http://mail.domain.com',
-          'options' => 'R',
-        },
-      },
-      locations   => {
-        '/application' => ['192.168.1.1:7001'],
-      },
+      group       => 'oracle',
+      domain_path => '/opt/test/wls/domains/domain1',
+      require     => Orawls::Control["start ohs ${domain_name}"],
+      notify      => Wls_ohsserver["reload ohs ${domain_name}"],
     }
 
-OHS will include all __.conf__ files at ${domain_path}/config/fmwconfig/components/OHS/instances/${server_name}/mod_wl_ohs.d folder.
+Notify option is needed to OHS restart and load changes. Require is needed because, without it, notify option may attempt to reload server before it's running.
 
+OHS will include all __.conf__ files at ${domain_path}/config/fmwconfig/components/OHS/${server_name}/mod_wl_ohs.d folder.
+
+This resource has been tested only with OHS 12.1.2 Standalone.
 
 ### fmwlogdir
 __orawls::fmwlogdir__ Change a log folder location of a FMW server
@@ -2300,6 +2297,28 @@ subscribe to a wls_domain, wls_identity_asserter or wls_authenticaton_provider e
       subscribe                 => Wls_domain['Wls1036'],
     }
 
+### wls_ohsserver
+
+type for ohs server control like start, running, abort and stop.
+also supports subscribe with refreshonly
+
+
+    # for this type you won't need a wls_setting identifier
+    wls_ohsserver{'OHS Server:':
+      ensure                    => 'running',   #running|start|abort|stop
+      server_name               => hiera('domain_adminserver'),
+      domain_name               => hiera('domain_name'),
+      domain_path               => "/opt/oracle/wlsdomains/domains/Wls1036",
+      os_user                   => hiera('wls_os_user'),
+      weblogic_home_dir         => hiera('wls_weblogic_home_dir'),
+      weblogic_user             => hiera('wls_weblogic_user'),
+      weblogic_password         => hiera('domain_wls_password'),
+      jdk_home_dir              => hiera('wls_jdk_home_dir'),
+      nodemanager_address       => hiera('domain_adminserver_address'),
+      nodemanager_port          => hiera('domain_nodemanager_port'),
+      jsse_enabled              => false,
+      custom_trust              => false,
+    }
 
 ### wls_deployment
 

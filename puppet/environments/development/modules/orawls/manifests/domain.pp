@@ -3,7 +3,7 @@
 # setup a new weblogic domain
 ##
 define orawls::domain (
-  $version                               = hiera('wls_version'                   , 1111),  # 1036|1111|1211|1212|1213|1221|12211
+  $version                               = hiera('wls_version'                   , 1111),  # 1036|1111|1211|1212|1213|1221|12211|12212
   $weblogic_home_dir                     = hiera('wls_weblogic_home_dir'), # /opt/oracle/middleware11gR1/wlserver_103
   $middleware_home_dir                   = hiera('wls_middleware_home_dir'), # /opt/oracle/middleware11gR1
   $jdk_home_dir                          = hiera('wls_jdk_home_dir'), # /usr/java/jdk1.7.0_45
@@ -583,6 +583,32 @@ define orawls::domain (
       group       => $os_group,
     }
 
+    if ($domain_template == 'ohs_standalone') {
+      ## Create OHS standalone config directory
+      file { "${domain_dir}/config/fmwconfig/components/OHS/ohs1/mod_wl_ohs.d":
+        ensure  => directory,
+        owner   => $os_user,
+        group   => $os_group,
+        mode    => '0640',
+        require => Exec["execwlst ${domain_name} ${title}"],
+      }
+
+      if ( $version <= 1212 ){
+        $source_mod = 'puppet:///modules/orawls/mod_wl_ohs.conf'
+      } else {
+        $source_mod = 'puppet:///modules/orawls/mod_wl_ohs_12c.conf'
+      }
+
+      file { "${domain_dir}/config/fmwconfig/components/OHS/ohs1/mod_wl_ohs.conf":
+        ensure  => present,
+        source  => $source_mod,
+        owner   => $os_user,
+        group   => $os_group,
+        mode    => '0640',
+        require => Exec["execwlst ${domain_name} ${title}"],
+      }
+    }
+
     if($extensionsTemplateFile) {
       exec { "execwlst ${domain_name} extension ${title}":
         command     => "${wlstPath}/wlst.sh domain_extension_${domain_name}.py",
@@ -600,13 +626,16 @@ define orawls::domain (
     # remove nodemanager properties so we can later add custom trust parameters in nodemanager.p
     if ( $custom_trust == true and ($version == 1212 or $version == 1213 or $version >= 1211 )) {
       exec { "rm ${domain_name} nodemanager.properties":
-        command     => "rm -rf ${$domain_dir}/nodemanager/nodemanager.properties",
-        cwd         => $download_dir,
-        timeout     => 0,
-        path        => $exec_path,
-        user        => $os_user,
-        group       => $os_group,
-        require     => Exec["execwlst ${domain_name} ${title}"],
+        command => "rm -rf ${$domain_dir}/nodemanager/nodemanager.properties",
+        cwd     => $download_dir,
+        timeout => 0,
+        path    => $exec_path,
+        user    => $os_user,
+        group   => $os_group,
+        require => Exec["execwlst ${domain_name} ${title}"],
+      }
+      if $extensionsTemplateFile {
+        Exec["execwlst ${domain_name} extension ${title}"] -> Exec["rm ${domain_name} nodemanager.properties"]
       }
     }
 
@@ -691,13 +720,24 @@ define orawls::domain (
           group   => $os_group,
         }
 
-        exec { "setDERBY_FLAGOnFalse ${domain_name} ${title}":
-          command => "sed -e's/DERBY_FLAG=\"true\"/DERBY_FLAG=\"false\"/g' ${domain_dir}/bin/setDomainEnv.sh > /tmp/domain3.tmp && mv /tmp/domain3.tmp ${domain_dir}/bin/setDomainEnv.sh",
-          onlyif  => "/bin/grep DERBY_FLAG=\"true\" ${domain_dir}/bin/setDomainEnv.sh | /usr/bin/wc -l",
-          require => Exec["setOSBDebugFlagOnFalse ${domain_name} ${title}"],
-          path    => $exec_path,
-          user    => $os_user,
-          group   => $os_group,
+        if ( $owsm_enabled == true ) {
+          exec { "setDERBY_FLAGOnFalse ${domain_name} ${title}":
+            command => "sed -e's/DERBY_FLAG=\"true\"/DERBY_FLAG=\"false\"/g' ${domain_dir}/bin/setDomainEnv.sh > /tmp/domain3.tmp && mv /tmp/domain3.tmp ${domain_dir}/bin/setDomainEnv.sh",
+            onlyif  => "/bin/grep DERBY_FLAG=\"true\" ${domain_dir}/bin/setDomainEnv.sh | /usr/bin/wc -l",
+            require => Exec["setOSBDebugFlagOnFalse ${domain_name} ${title}"],
+            path    => $exec_path,
+            user    => $os_user,
+            group   => $os_group,
+          }
+        } else {
+          exec { "setDERBY_FLAGOnTrue ${domain_name} ${title}":
+            command => "sed -e's/DERBY_FLAG=\"false\"/DERBY_FLAG=\"true\"/g' ${domain_dir}/bin/setDomainEnv.sh > /tmp/domain3.tmp && mv /tmp/domain3.tmp ${domain_dir}/bin/setDomainEnv.sh",
+            onlyif  => "/bin/grep DERBY_FLAG=\"false\" ${domain_dir}/bin/setDomainEnv.sh | /usr/bin/wc -l",
+            require => Exec["setOSBDebugFlagOnFalse ${domain_name} ${title}"],
+            path    => $exec_path,
+            user    => $os_user,
+            group   => $os_group,
+          }
         }
 
       }
@@ -728,13 +768,24 @@ define orawls::domain (
           group   => $os_group,
         }
 
-        exec { "setDERBY_FLAGOnFalse ${domain_name} ${title}":
-          command => "sed -i -e's/DERBY_FLAG=\"true\"/DERBY_FLAG=\"false\"/g' ${domain_dir}/bin/setDomainEnv.sh",
-          onlyif  => "/bin/grep DERBY_FLAG=\"true\" ${domain_dir}/bin/setDomainEnv.sh | /usr/bin/wc -l",
-          require => Exec["setOSBDebugFlagOnFalse ${domain_name} ${title}"],
-          path    => $exec_path,
-          user    => $os_user,
-          group   => $os_group,
+        if ( $owsm_enabled == true ) {
+          exec { "setDERBY_FLAGOnFalse ${domain_name} ${title}":
+            command => "sed -i -e's/DERBY_FLAG=\"true\"/DERBY_FLAG=\"false\"/g' ${domain_dir}/bin/setDomainEnv.sh",
+            onlyif  => "/bin/grep DERBY_FLAG=\"true\" ${domain_dir}/bin/setDomainEnv.sh | /usr/bin/wc -l",
+            require => Exec["setOSBDebugFlagOnFalse ${domain_name} ${title}"],
+            path    => $exec_path,
+            user    => $os_user,
+            group   => $os_group,
+          }
+        } else {
+          exec { "setDERBY_FLAGOnTrue ${domain_name} ${title}":
+            command => "sed -i -e's/DERBY_FLAG=\"false\"/DERBY_FLAG=\"true\"/g' ${domain_dir}/bin/setDomainEnv.sh",
+            onlyif  => "/bin/grep DERBY_FLAG=\"false\" ${domain_dir}/bin/setDomainEnv.sh | /usr/bin/wc -l",
+            require => Exec["setOSBDebugFlagOnFalse ${domain_name} ${title}"],
+            path    => $exec_path,
+            user    => $os_user,
+            group   => $os_group,
+          }
         }
 
       }

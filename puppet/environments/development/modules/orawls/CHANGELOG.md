@@ -1,5 +1,25 @@
 # History
 
+## 1.0.57
+- Added support for Wls/FMW 12.2.1.2
+- Changing indentation from "2" to "4" in wls_exec statements
+
+## 1.0.56
+- new type wls_ohsserver to control the ohs standalone server or subscribe to changes
+- orawls::ohs::forwarder type, re-factored and improved version of orawls::ohs::config
+- ohs standalone domain fix for startComponent ( > 12.1.2, adding machine to the domain)
+- Apply same BSU patch on different middleware homes
+- added weblogic install parameters force & validation
+
+## 1.0.55
+- Option for Control.pp and wls_managedserver to use secure connection to the adminserver
+- For an OSB domain without a DB ( owsm_enabled = false ) enables now the Derby database so wlsbjmsrpDataSource is active and osb servers comes up in running mode
+
+## 1.0.54
+- SOA 12.2.1.1 bam fix for single node clusters
+- wls_managedserver fix for forced shutdown/restart
+- domain fix for nodemanager properties & domain extension template
+
 ## 1.0.53
 - nodemanager manifest will auto restart nodemanager when a property is changed
 - copydomain now support t3s with custom trust
